@@ -27,8 +27,12 @@ class _LoadingScreenState extends State<LoadingScreen>
     _timer = Timer.periodic(
         oneSec,
         (Timer timer) => setState(() {
-              if (_startCounter < 1) {
+              if (_startCounter < 2) {
                 timer.cancel();
+                Navigator.push(
+                      context,
+                      MyCustomRoute(builder: (context) => GameScreen()),
+                    );
                 return;
               }
 
@@ -64,20 +68,28 @@ class _LoadingScreenState extends State<LoadingScreen>
                   style: TextStyle(
                       color: Colors.grey, fontWeight: FontWeight.w600),
                 ),
-                RaisedButton(
-                  child: Text('Start'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GameScreen()),
-                    );
-                  },
-                )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class MyCustomRoute<T> extends MaterialPageRoute<T> {
+  MyCustomRoute({ WidgetBuilder builder, RouteSettings settings })
+      : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    if (settings.isInitialRoute)
+      return child;
+    // Fades between routes. (If you don't want any animation,
+    // just return child.)
+    return new FadeTransition(opacity: animation, child: child);
   }
 }
