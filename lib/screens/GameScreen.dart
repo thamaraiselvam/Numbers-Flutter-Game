@@ -1,9 +1,25 @@
+import 'dart:async';
 import 'package:add_numbers/widgets/bgGradient.dart';
 import 'package:add_numbers/widgets/numberBlockBuilder.dart';
 import 'package:add_numbers/widgets/targetBlockBuilder.dart';
 import 'package:flutter/material.dart';
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  NumberCreater numberCreater = NumberCreater();
+
+  @override
+  void initState() {
+    super.initState();
+    numberCreater.stream.listen((data) {
+      print(data);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,11 +32,11 @@ class GameScreen extends StatelessWidget {
               SizedBox(
                 height: 40,
               ),
-              buildTargetBlock(title: 'Target', targetValue: 19),
+              buildTargetBlock(title: 'Target', targetValue: 6),
               SizedBox(
                 height: 6,
               ),
-              buildNumberBlocks()
+              buildNumberBlocks(numberCreater)
             ],
           ),
         ),
