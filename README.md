@@ -1,4 +1,4 @@
-# add_numbers
+# Add Numbers - Flutter Game
 
 A new Flutter project.
 
