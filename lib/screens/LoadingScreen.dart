@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:add_numbers/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'GameScreen.dart';
 
 class LoadingScreen extends StatefulWidget {
   // This widget is the root of your application.
@@ -23,23 +23,29 @@ class _LoadingScreenState extends State<LoadingScreen>
   }
 
   void runCounter() {
-    Duration oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-        oneSec,
-        (Timer timer) => setState(() {
-              if (_startCounter < 2) {
-                timer.cancel();
-                Navigator.push(
-                      context,
-                      MyCustomRoute(builder: (context) => GameScreen()),
-                    );
-                return;
-              }
+    _timer = Timer.periodic(Duration(seconds: 1), loadTimer);
+  }
 
-              _color = Color.fromRGBO(random.nextInt(256), random.nextInt(256),
-                  random.nextInt(256), 1);
-              _startCounter--;
-            }));
+  loadTimer(Timer timer) {
+    setState(() {
+      this.loadGameWhenReady(timer);
+      this.continueLoader();
+    });
+  }
+
+  void continueLoader() {
+    _color = Common.getRandomColor();
+    _startCounter--;
+  }
+
+  void loadGameWhenReady(Timer timer) {
+    if (_startCounter > 1) {
+      return;
+    }
+
+    timer.cancel();
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/game', (Route<dynamic> route) => false);
   }
 
   @override
@@ -74,22 +80,5 @@ class _LoadingScreenState extends State<LoadingScreen>
         ),
       ),
     );
-  }
-}
-
-class MyCustomRoute<T> extends MaterialPageRoute<T> {
-  MyCustomRoute({ WidgetBuilder builder, RouteSettings settings })
-      : super(builder: builder, settings: settings);
-
-  @override
-  Widget buildTransitions(BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
-    if (settings.isInitialRoute)
-      return child;
-    // Fades between routes. (If you don't want any animation,
-    // just return child.)
-    return new FadeTransition(opacity: animation, child: child);
   }
 }

@@ -1,13 +1,11 @@
 import 'dart:async';
-class NumberCreater {
-  var _count = 1;
+class BlockDataStream {
 
-  void setCount(int count){
-    this._count = count;
-    _controller.sink.add(count);
+  void setCount({int index, int value}){
+    _controller.sink.add({"index": index, "value": value});
   }
 
-  final _controller = StreamController<int>();
+  final _controller = StreamController<Map<String, int>>();
 
-  Stream<int> get stream => _controller.stream;
+  Stream<Map<String, int>> get stream => _controller.stream;
 }

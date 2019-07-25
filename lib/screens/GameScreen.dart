@@ -1,3 +1,4 @@
+import 'package:add_numbers/schema/blackSchema.dart';
 import 'package:add_numbers/widgets/bgGradient.dart';
 import 'package:add_numbers/provider/BlockDataStream.dart';
 import 'package:add_numbers/widgets/targetBlockBuilder.dart';
@@ -9,26 +10,93 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  NumberCreater numberCreater = NumberCreater();
+  BlockDataStream blockDataStream = BlockDataStream();
 
-  List blocks = getBlocks();
+  BlockSchema blockSchema;
+  List<BlockSchema> blocks;
+
+  int currentTotal;
 
   @override
   void initState() {
     super.initState();
-    numberCreater.stream.listen((data) {
+    this.fillBlocksData();
+    this.listenBlockChanges();
+  }
+
+  void fillBlocksData() {
+    setState(() {
+      this.currentTotal = 0;
+      this.blockSchema = BlockSchema();
+      this.blocks = blockSchema.getBlocks();
+    });
+  }
+
+  void listenBlockChanges() {
+    blockDataStream.stream.listen((Map<String, int> blockData) {
       setState(() {
-        if (this.blocks[data].color != Colors.green) {
-          this.blocks[data].color = Colors.green;
-        }
+        _validateBlocks(blockData);
       });
     });
   }
 
+  void _validateBlocks(blockData) {
+    int selectedIndex = blockData['index'];
+
+    if (this.blocks[selectedIndex].isSelected) {
+      return;
+    }
+
+    this.blocks[selectedIndex].isSelected = true;
+
+    this.currentTotal += blockData['value'];
+
+    if (this.currentTotal < this.blockSchema.target) {
+      changeBlockColor(selectedIndex, Colors.green);
+      if (!isThereChanceToMakeItCorrect()) {
+        _wrongAnswer(selectedIndex);
+        return;
+      }
+    } else if (this.currentTotal == this.blockSchema.target) {
+      _correctAnswer(selectedIndex);
+    } else {
+      _wrongAnswer(selectedIndex);
+    }
+  }
+
+  void _wrongAnswer(selectedIndex) {
+    changeBlockColor(selectedIndex, Colors.red);
+    _showStatusAlert('Wrong !!!', Icons.clear, Colors.red, false);
+  }
+
+  void _correctAnswer(selectedIndex) {
+    changeBlockColor(selectedIndex, Colors.green);
+    _showStatusAlert('Correct !!!', Icons.check, Colors.green, true);
+  }
+
+  bool isThereChanceToMakeItCorrect() {
+    bool chance = false;
+
+    for (var i = 0; i < this.blocks.length; i++) {
+      if (this.blocks[i].isSelected) {
+        continue;
+      }
+
+      if (this.currentTotal + this.blocks[i].value <= this.blockSchema.target) {
+        chance = true;
+      }
+    }
+
+    return chance;
+  }
+
+  void changeBlockColor(selectedIndex, Color color) {
+    this.blocks[selectedIndex].color = color;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: SafeArea(
+    return SafeArea(
       child: Scaffold(
         body: Container(
           decoration: bgBoxDecoration(),
@@ -37,7 +105,8 @@ class _GameScreenState extends State<GameScreen> {
               SizedBox(
                 height: 40,
               ),
-              buildTargetBlock(title: 'Target', targetValue: 6),
+              buildTargetBlock(
+                  title: 'Target', targetValue: this.blockSchema.target),
               SizedBox(
                 height: 6,
               ),
@@ -46,7 +115,7 @@ class _GameScreenState extends State<GameScreen> {
           ),
         ),
       ),
-    ));
+    );
   }
 
   Container buildNumberBlocks() {
@@ -55,34 +124,69 @@ class _GameScreenState extends State<GameScreen> {
       alignment: Alignment(0.0, 0.0),
       // color: Colors.grey,
       padding: const EdgeInsets.all(30),
-      child: Wrap(
-        spacing: 40,
-        runSpacing: 40,
-        children: <Widget>[
-          _numberBlock(
-              bgColor: this.blocks[0].color, value: this.blocks[0].value),
-          _numberBlock(
-              bgColor: this.blocks[1].color, value: this.blocks[1].value),
-          _numberBlock(
-              bgColor: this.blocks[2].color, value: this.blocks[2].value),
-          _numberBlock(
-              bgColor: this.blocks[3].color, value: this.blocks[3].value),
-          _numberBlock(
-              bgColor: this.blocks[4].color, value: this.blocks[4].value),
-          _numberBlock(
-              bgColor: this.blocks[5].color, value: this.blocks[5].value),
-        ],
-      ),
+      child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(6)),
     );
   }
 
-  Widget _numberBlock({Color borderColor, Color bgColor, int value}) {
+  List<Widget> _generateBlocks(int size) {
+    List<Widget> blocks = [];
+
+    for (var i = 0; i < size; i++) {
+      blocks.add(_numberBlock(
+          bgColor: this.blocks[i].color,
+          index: this.blocks[i].index,
+          value: this.blocks[i].value));
+    }
+
+    return blocks;
+  }
+
+  Future<void> _showStatusAlert(
+      String title, IconData icon, Color color, bool isSuccess) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          content: SingleChildScrollView(
+            child: Center(
+              child: Icon(
+                icon,
+                color: color,
+                size: 100,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Solve Another one',
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () {
+                fillBlocksData();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _numberBlock(
+      {Color borderColor, Color bgColor, int index, int value}) {
     bool isSelected = false;
     return Material(
       child: InkWell(
         onTap: () {
           isSelected = isSelected ? false : true;
-          numberCreater.setCount(value);
+          blockDataStream.setCount(index: index, value: value);
         }, // handle your onTap here
         child: Container(
           width: 120,
@@ -101,22 +205,4 @@ class _GameScreenState extends State<GameScreen> {
       ),
     );
   }
-}
-
-class Block {
-  Color color;
-  int value;
-  int index;
-  Block(this.color, this.value);
-}
-
-List<Block> getBlocks() {
-  return [
-    new Block(Colors.yellow, 0),
-    new Block(Colors.red, 1),
-    new Block(Colors.blue, 2),
-    new Block(Colors.yellow, 3),
-    new Block(Colors.red, 4),
-    new Block(Colors.blue, 5)
-  ];
 }
