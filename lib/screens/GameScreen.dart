@@ -15,7 +15,7 @@ class _GameScreenState extends State<GameScreen> {
   List<BlockSchema> blocks;
   int currentTotal;
   Timer gameTimerObject;
-  int secCounter = 2;
+  int secCounter = 30;
   bool isTimeUp = false;
   Map<String, int> gameHistory = {"total": 0, "success": 0, "fail": 0};
   BlockDataStream blockDataStream = BlockDataStream();
