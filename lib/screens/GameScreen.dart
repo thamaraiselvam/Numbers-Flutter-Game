@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:numbers/schema/blackSchema.dart';
 import 'package:numbers/widgets/bgGradient.dart';
 import 'package:numbers/provider/BlockDataStream.dart';
@@ -16,7 +15,7 @@ class _GameScreenState extends State<GameScreen> {
   List<BlockSchema> blocks;
   int currentTotal;
   Timer gameTimerObject;
-  int secCounter = 1;
+  int secCounter = 2;
   bool isTimeUp = false;
   Map<String, int> gameHistory = {"total": 0, "success": 0, "fail": 0};
   BlockDataStream blockDataStream = BlockDataStream();
@@ -102,6 +101,9 @@ class _GameScreenState extends State<GameScreen> {
 
   void _closePopUpAndShuffle() {
     Timer(Duration(seconds: 1), () {
+      if (this.isTimeUp) {
+        return;
+      }
       Navigator.of(context).pop();
       fillBlocksData();
     });
@@ -277,8 +279,11 @@ class _GameScreenState extends State<GameScreen> {
                         icon: Icon(Icons.home),
                         iconSize: 40,
                         color: Colors.blue,
-                        tooltip: 'Restart',
-                        onPressed: () {},
+                        tooltip: 'Home',
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/home', (Route<dynamic> route) => false);
+                        },
                       ),
                       IconButton(
                         alignment: Alignment.center,
@@ -286,7 +291,10 @@ class _GameScreenState extends State<GameScreen> {
                         iconSize: 40,
                         color: Colors.green,
                         tooltip: 'Restart',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/loading', (Route<dynamic> route) => false);
+                        },
                       ),
                     ],
                   )

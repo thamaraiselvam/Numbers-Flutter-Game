@@ -6,7 +6,7 @@ BoxDecoration bgBoxDecoration() {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-        Color.fromRGBO(66, 39, 90, 1),
-        Color.fromRGBO(115, 75, 109, 1)
+        Color.fromRGBO(40, 20, 130, 1),
+        Color.fromRGBO(206, 127, 216, 1)
       ]));
 }
