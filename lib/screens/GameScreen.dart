@@ -1,7 +1,9 @@
-import 'package:add_numbers/schema/blackSchema.dart';
-import 'package:add_numbers/widgets/bgGradient.dart';
-import 'package:add_numbers/provider/BlockDataStream.dart';
-import 'package:add_numbers/widgets/targetBlockBuilder.dart';
+import 'dart:async';
+import 'package:giffy_dialog/giffy_dialog.dart';
+import 'package:numbers/schema/blackSchema.dart';
+import 'package:numbers/widgets/bgGradient.dart';
+import 'package:numbers/provider/BlockDataStream.dart';
+import 'package:numbers/widgets/targetBlockBuilder.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatefulWidget {
@@ -10,22 +12,42 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  BlockDataStream blockDataStream = BlockDataStream();
-
   BlockSchema blockSchema;
   List<BlockSchema> blocks;
-
   int currentTotal;
+  Timer gameTimerObject;
+  int secCounter = 1;
+  bool isTimeUp = false;
+  Map<String, int> gameHistory = {"total": 0, "success": 0, "fail": 0};
+  BlockDataStream blockDataStream = BlockDataStream();
 
   @override
   void initState() {
     super.initState();
+    this.initTimer();
     this.fillBlocksData();
     this.listenBlockChanges();
   }
 
+  void initTimer() {
+    this.gameTimerObject = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        this.secCounter--;
+        if (this.secCounter < 1) {
+          this.isTimeUp = true;
+          this.gameTimerObject.cancel();
+          _showSummary();
+        }
+      });
+    });
+  }
+
   void fillBlocksData() {
+    if (this.isTimeUp) {
+      return;
+    }
     setState(() {
+      this.gameHistory['total']++;
       this.currentTotal = 0;
       this.blockSchema = BlockSchema();
       this.blocks = blockSchema.getBlocks();
@@ -52,7 +74,7 @@ class _GameScreenState extends State<GameScreen> {
     this.currentTotal += blockData['value'];
 
     if (this.currentTotal < this.blockSchema.target) {
-      changeBlockColor(selectedIndex, Colors.green);
+      _changeBlockColor(selectedIndex, Colors.green);
       if (!isThereChanceToMakeItCorrect()) {
         _wrongAnswer(selectedIndex);
         return;
@@ -65,13 +87,24 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _wrongAnswer(selectedIndex) {
-    changeBlockColor(selectedIndex, Colors.red);
+    this.gameHistory['fail']++;
+    _changeBlockColor(selectedIndex, Colors.red);
     _showStatusAlert('Wrong !!!', Icons.clear, Colors.red, false);
+    _closePopUpAndShuffle();
   }
 
   void _correctAnswer(selectedIndex) {
-    changeBlockColor(selectedIndex, Colors.green);
+    this.gameHistory['success']++;
+    _changeBlockColor(selectedIndex, Colors.green);
     _showStatusAlert('Correct !!!', Icons.check, Colors.green, true);
+    _closePopUpAndShuffle();
+  }
+
+  void _closePopUpAndShuffle() {
+    Timer(Duration(seconds: 1), () {
+      Navigator.of(context).pop();
+      fillBlocksData();
+    });
   }
 
   bool isThereChanceToMakeItCorrect() {
@@ -90,7 +123,7 @@ class _GameScreenState extends State<GameScreen> {
     return chance;
   }
 
-  void changeBlockColor(selectedIndex, Color color) {
+  void _changeBlockColor(selectedIndex, Color color) {
     this.blocks[selectedIndex].color = color;
   }
 
@@ -103,18 +136,66 @@ class _GameScreenState extends State<GameScreen> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 40,
+                height: 10,
+              ),
+              _headerInfo(),
+              SizedBox(
+                height: 10,
               ),
               buildTargetBlock(
                   title: 'Target', targetValue: this.blockSchema.target),
-              SizedBox(
-                height: 6,
-              ),
               buildNumberBlocks()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Row _headerInfo() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+            padding: const EdgeInsets.only(left: 15, right: 10),
+            width: 100,
+            color: Colors.red,
+            child: Row(
+              children: <Widget>[
+                Text(
+                  'TIMER : ',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  this.secCounter.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            )),
+        Container(
+            margin: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 15, right: 10),
+            width: 100,
+            color: Colors.green,
+            child: Row(
+              children: <Widget>[
+                Text(
+                  'SCORE : ',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  this.gameHistory['success'].toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ))
+      ],
     );
   }
 
@@ -148,32 +229,71 @@ class _GameScreenState extends State<GameScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            title,
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
+          backgroundColor: Colors.white.withOpacity(0),
+          content: Container(
+            width: 100,
+            height: 100,
+            child: Icon(
+              icon,
+              color: color,
+              size: 100,
+            ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showSummary() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
           content: SingleChildScrollView(
-            child: Center(
-              child: Icon(
-                icon,
-                color: color,
-                size: 100,
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Score: ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                        Text(
+                          this.gameHistory['success'].toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                      ]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        alignment: Alignment.center,
+                        icon: Icon(Icons.home),
+                        iconSize: 40,
+                        color: Colors.blue,
+                        tooltip: 'Restart',
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        alignment: Alignment.center,
+                        icon: Icon(Icons.refresh),
+                        iconSize: 40,
+                        color: Colors.green,
+                        tooltip: 'Restart',
+                        onPressed: () {},
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                'Solve Another one',
-                textAlign: TextAlign.center,
-              ),
-              onPressed: () {
-                fillBlocksData();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
