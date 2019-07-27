@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numbers/utils/constants.dart';
 
 Container buildTargetBlock({String title, int targetValue}) {
   return Container(
@@ -25,7 +26,7 @@ Container buildTargetBlock({String title, int targetValue}) {
       ],
     ),
     decoration: BoxDecoration(
-        color: Color.fromRGBO(17, 38, 33, 0.5),
+        color: blackLowOpacity,
         borderRadius: new BorderRadius.circular(10)),
   );
 }

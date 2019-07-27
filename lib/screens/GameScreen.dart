@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:numbers/schema/blackSchema.dart';
+import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/bgGradient.dart';
 import 'package:numbers/provider/BlockDataStream.dart';
 import 'package:numbers/widgets/targetBlockBuilder.dart';
@@ -28,7 +29,35 @@ class _GameScreenState extends State<GameScreen> {
     this.listenBlockChanges();
   }
 
-  void initTimer() {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          height: double.infinity,
+          decoration: bgBoxDecoration(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                _headerInfo(),
+                SizedBox(
+                  height: 10,
+                ),
+                buildTargetBlock(
+                    title: 'Target', targetValue: this.blockSchema.target),
+                buildNumberBlocks()
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+   void initTimer() {
     this.gameTimerObject = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         this.secCounter--;
@@ -129,31 +158,6 @@ class _GameScreenState extends State<GameScreen> {
     this.blocks[selectedIndex].color = color;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: bgBoxDecoration(),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 10,
-              ),
-              _headerInfo(),
-              SizedBox(
-                height: 10,
-              ),
-              buildTargetBlock(
-                  title: 'Target', targetValue: this.blockSchema.target),
-              buildNumberBlocks()
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Row _headerInfo() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -161,7 +165,7 @@ class _GameScreenState extends State<GameScreen> {
         Container(
             padding: const EdgeInsets.only(left: 15, right: 10),
             width: 100,
-            color: Colors.red,
+            color: blackLowOpacity,
             child: Row(
               children: <Widget>[
                 Text(
@@ -181,7 +185,7 @@ class _GameScreenState extends State<GameScreen> {
             margin: const EdgeInsets.only(left: 10),
             padding: const EdgeInsets.only(left: 15, right: 10),
             width: 100,
-            color: Colors.green,
+            color: blackLowOpacity,
             child: Row(
               children: <Widget>[
                 Text(

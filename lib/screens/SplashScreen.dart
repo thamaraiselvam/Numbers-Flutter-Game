@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:numbers/utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
@@ -37,8 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                  Color.fromRGBO(40, 20, 130, 1),
-                  Color.fromRGBO(206, 127, 216, 1)
+                  primaryColor,
+                  secondaryColor
                 ])),
           ),
           Column(

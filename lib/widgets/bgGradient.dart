@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numbers/utils/constants.dart';
 
 BoxDecoration bgBoxDecoration() {
   return BoxDecoration(
@@ -6,7 +7,7 @@ BoxDecoration bgBoxDecoration() {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-        Color.fromRGBO(40, 20, 130, 1),
-        Color.fromRGBO(206, 127, 216, 1)
+        primaryColor,
+        secondaryColor
       ]));
 }
