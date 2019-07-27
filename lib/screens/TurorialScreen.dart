@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:numbers/utils/constants.dart';
 
-class HowToScreen extends StatelessWidget {
-  const HowToScreen({Key key}) : super(key: key);
+class TurorialScreen extends StatelessWidget {
+  const TurorialScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

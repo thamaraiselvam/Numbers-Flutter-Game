@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
-import 'package:numbers/screens/GameScreen.dart';
-import 'package:numbers/screens/HowToScreen.dart';
+import 'package:numbers/screens/GameScreen/GameScreen.dart';
+import 'package:numbers/screens/TurorialScreen.dart';
 import 'package:numbers/screens/LoadingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:numbers/screens/SplashScreen.dart';
-import 'package:numbers/screens/homeScreen.dart';
+import 'package:numbers/screens/HomeScreen/HomeScreen.dart';
 
 Future<void> main() async {
   SystemChrome.setPreferredOrientations([
@@ -19,7 +19,7 @@ Future<void> main() async {
         '/home': (BuildContext context) => HomeScreen(),
         '/loading': (BuildContext context) => LoadingScreen(),
         '/game': (BuildContext context) => GameScreen(),
-        '/howTo': (BuildContext context) => HowToScreen(),
+        '/tutorial': (BuildContext context) => TurorialScreen(),
       },
     ));
 }

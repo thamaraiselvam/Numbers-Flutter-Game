@@ -57,7 +57,7 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-   void initTimer() {
+  void initTimer() {
     this.gameTimerObject = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         this.secCounter--;
@@ -211,7 +211,9 @@ class _GameScreenState extends State<GameScreen> {
       alignment: Alignment(0.0, 0.0),
       // color: Colors.grey,
       padding: const EdgeInsets.all(30),
-      child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(6)),
+      child: Center(
+        child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(6)),
+      ),
     );
   }
 
