@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:numbers/schema/blackSchema.dart';
-import 'package:numbers/utils/constants.dart';
+import 'package:numbers/screens/GameScreen/summaryModel.dart';
 import 'package:numbers/widgets/bgGradient.dart';
 import 'package:numbers/provider/BlockDataStream.dart';
-import 'package:numbers/widgets/targetBlockBuilder.dart';
 import 'package:flutter/material.dart';
+import 'headerInfo.widget.dart';
+import 'numberBlocks.widget.dart';
+import 'targetBlock.widget.dart';
 
 class GameScreen extends StatefulWidget {
   @override
@@ -42,7 +44,7 @@ class _GameScreenState extends State<GameScreen> {
                 SizedBox(
                   height: 10,
                 ),
-                _headerInfo(),
+                headerInfo(this.secCounter, this.gameHistory),
                 SizedBox(
                   height: 10,
                 ),
@@ -64,7 +66,7 @@ class _GameScreenState extends State<GameScreen> {
         if (this.secCounter < 1) {
           this.isTimeUp = true;
           this.gameTimerObject.cancel();
-          _showSummary();
+          showSummary(context, gameHistory);
         }
       });
     });
@@ -158,62 +160,13 @@ class _GameScreenState extends State<GameScreen> {
     this.blocks[selectedIndex].color = color;
   }
 
-  Row _headerInfo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-            padding: const EdgeInsets.only(left: 15, right: 10),
-            width: 100,
-            color: blackLowOpacity,
-            child: Row(
-              children: <Widget>[
-                Text(
-                  'TIMER : ',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  this.secCounter.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            )),
-        Container(
-            margin: const EdgeInsets.only(left: 10),
-            padding: const EdgeInsets.only(left: 15, right: 10),
-            width: 100,
-            color: blackLowOpacity,
-            child: Row(
-              children: <Widget>[
-                Text(
-                  'SCORE : ',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  this.gameHistory['success'].toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ))
-      ],
-    );
-  }
-
   Container buildNumberBlocks() {
     return Container(
       // alignment: Alignment.centerLeft,
       alignment: Alignment(0.0, 0.0),
       // color: Colors.grey,
       padding: const EdgeInsets.all(30),
-      child: Center(
-        child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(6)),
-      ),
+      child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(6)),
     );
   }
 
@@ -221,10 +174,11 @@ class _GameScreenState extends State<GameScreen> {
     List<Widget> blocks = [];
 
     for (var i = 0; i < size; i++) {
-      blocks.add(_numberBlock(
+      blocks.add(numberBlock(
           bgColor: this.blocks[i].color,
           index: this.blocks[i].index,
-          value: this.blocks[i].value));
+          value: this.blocks[i].value,
+          blockDataStream: this.blockDataStream));
     }
 
     return blocks;
@@ -249,94 +203,6 @@ class _GameScreenState extends State<GameScreen> {
           ),
         );
       },
-    );
-  }
-
-  Future<void> _showSummary() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Score: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 30),
-                        ),
-                        Text(
-                          this.gameHistory['success'].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 30),
-                        ),
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        alignment: Alignment.center,
-                        icon: Icon(Icons.home),
-                        iconSize: 40,
-                        color: Colors.blue,
-                        tooltip: 'Home',
-                        onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/home', (Route<dynamic> route) => false);
-                        },
-                      ),
-                      IconButton(
-                        alignment: Alignment.center,
-                        icon: Icon(Icons.refresh),
-                        iconSize: 40,
-                        color: Colors.green,
-                        tooltip: 'Restart',
-                        onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/loading', (Route<dynamic> route) => false);
-                        },
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _numberBlock(
-      {Color borderColor, Color bgColor, int index, int value}) {
-    bool isSelected = false;
-    return Material(
-      child: InkWell(
-        onTap: () {
-          isSelected = isSelected ? false : true;
-          blockDataStream.setCount(index: index, value: value);
-        }, // handle your onTap here
-        child: Container(
-          width: 120,
-          height: 120,
-          alignment: Alignment(0.0, 0.0),
-          decoration: BoxDecoration(
-              color: bgColor,
-              border: Border.all(color: Colors.white, width: 5),
-              borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            value.toString(),
-            style: TextStyle(
-                color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
     );
   }
 }
