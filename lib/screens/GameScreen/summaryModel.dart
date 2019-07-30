@@ -20,7 +20,7 @@ Future<void> showSummary(BuildContext context, Map<String, int> gameHistory, ) a
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
                         Text(
-                          gameHistory['success'].toString(),
+                          gameHistory['score'].toString(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),

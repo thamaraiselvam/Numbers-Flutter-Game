@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:numbers/component/ScoreCard.dart';
+import 'package:numbers/store/BestScore.dart';
 import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/dashedLine.dart';
 
@@ -7,8 +8,27 @@ import 'appTitle.widget.dart';
 import 'bestScore.widget.dart';
 import 'tutorialBtn.widget.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  int bestScore = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    this.setBestScore();
+  }
+
+  void setBestScore() async {
+    int _bestScore = await BestScoreStore().getBestScore();
+    setState(() {
+      this.bestScore = _bestScore;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 40,
                       ),
-                      BestScore(),
+                      buildBestScore(this.bestScore),
                       dashedLineBreak(Colors.white),
                       SizedBox(
                         height: 10,

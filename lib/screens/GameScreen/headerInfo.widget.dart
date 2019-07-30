@@ -27,7 +27,7 @@ Row headerInfo(int secCounter, Map<String, int> gameHistory) {
       Container(
           margin: const EdgeInsets.only(left: 10),
           padding: const EdgeInsets.only(left: 15, right: 10),
-          width: 100,
+          // width: 200,
           color: blackLowOpacity,
           child: Row(
             children: <Widget>[
@@ -39,7 +39,7 @@ Row headerInfo(int secCounter, Map<String, int> gameHistory) {
                 textAlign: TextAlign.center,
               ),
               Text(
-                gameHistory['success'].toString(),
+                gameHistory['score'].toString(),
                 style: TextStyle(color: Colors.white),
               ),
             ],

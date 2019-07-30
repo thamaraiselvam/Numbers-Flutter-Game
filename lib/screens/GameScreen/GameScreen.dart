@@ -3,6 +3,7 @@ import 'package:numbers/store/BestScore.dart';
 import 'package:numbers/store/RecentScoreStore.dart';
 import 'package:numbers/schema/BlockSchema.dart';
 import 'package:numbers/screens/GameScreen/summaryModel.dart';
+import 'package:numbers/utils/Config.dart';
 import 'package:numbers/widgets/bgGradient.dart';
 import 'package:numbers/provider/BlockDataStream.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,16 @@ class _GameScreenState extends State<GameScreen> {
   List<BlockSchema> blocks;
   int currentTotal;
   Timer gameTimerObject;
-  int secCounter = 5;
+  int secCounter = gameDuration;
   bool isTimeUp = false;
-  Map<String, int> gameHistory = {"total": 0, "success": 0, "fail": 0};
+  Map<String, int> gameHistory = {
+    "total": 0,
+    "success": 0,
+    "fail": 0,
+    "score": 0,
+    "selectedBlocks": 0,
+    "tmpSelectedBlocks": 0
+  };
   BlockDataStream blockDataStream = BlockDataStream();
 
   @override
@@ -66,18 +74,30 @@ class _GameScreenState extends State<GameScreen> {
       setState(() {
         this.secCounter--;
         if (this.secCounter < 1) {
-          this.isTimeUp = true;
-          this.gameTimerObject.cancel();
-          showSummary(context, gameHistory);
-          updateScores();
+          this.postGameWorks();
         }
       });
     });
   }
 
-  void updateScores(){
-    RecentScoreStore().updateRecentScore(gameHistory['success']);
-    BestScoreStore().updateScore(gameHistory['success']);
+  void postGameWorks() {
+    this.isTimeUp = true;
+    this.gameTimerObject.cancel();
+    showSummary(context, gameHistory);
+    updateScores();
+  }
+
+  void calculateScore() {
+    int score = (this.gameHistory['selectedBlocks'] * costs['block']) +
+        (this.gameHistory['success'] * costs['success']) +
+        (this.gameHistory['fail'] * costs['fail']);
+    this.gameHistory['score'] = score > 0 ? (score) : 0;
+    print(this.gameHistory);
+  }
+
+  void updateScores() {
+    RecentScoreStore().updateRecentScore(gameHistory['score']);
+    BestScoreStore().updateScore(gameHistory['score']);
   }
 
   void fillBlocksData() {
@@ -109,6 +129,8 @@ class _GameScreenState extends State<GameScreen> {
 
     this.blocks[selectedIndex].isSelected = true;
 
+    this.gameHistory['tmpSelectedBlocks']++;
+
     this.currentTotal += blockData['value'];
 
     if (this.currentTotal < this.blockSchema.target) {
@@ -126,6 +148,8 @@ class _GameScreenState extends State<GameScreen> {
 
   void _wrongAnswer(selectedIndex) {
     this.gameHistory['fail']++;
+    this.gameHistory['tmpSelectedBlocks'] = 0; //reset
+    calculateScore();
     _changeBlockColor(selectedIndex, Colors.red);
     _showStatusAlert('Wrong !!!', Icons.clear, Colors.red, false);
     _closePopUpAndShuffle();
@@ -133,6 +157,9 @@ class _GameScreenState extends State<GameScreen> {
 
   void _correctAnswer(selectedIndex) {
     this.gameHistory['success']++;
+    this.gameHistory['selectedBlocks'] += this.gameHistory['tmpSelectedBlocks'];
+    this.gameHistory['tmpSelectedBlocks'] = 0; //reset
+    calculateScore();
     _changeBlockColor(selectedIndex, Colors.green);
     _showStatusAlert('Correct !!!', Icons.check, Colors.green, true);
     _closePopUpAndShuffle();
