@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class bestScore extends StatelessWidget {
-  const bestScore({Key key}) : super(key: key);
+class BestScore extends StatelessWidget {
+  const BestScore({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

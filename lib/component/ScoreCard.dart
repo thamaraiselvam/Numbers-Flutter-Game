@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:numbers/provider/ScoreStore.dart';
 import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/dashedLine.dart';
-import 'package:numbers/widgets/tableRow.dart';
+import 'package:numbers/widgets/recentScore.dart';
 
-class ScoreBoard extends StatelessWidget {
-  String title;
+class ScoreBoard extends StatefulWidget {
+  final String title;
   ScoreBoard(this.title);
+
+  @override
+  _ScoreBoardState createState() => _ScoreBoardState();
+}
+
+class _ScoreBoardState extends State<ScoreBoard> {
+  List recentScore = [];
+  Map scoreCardMeta = {};
+  @override
+  void initState() {
+    super.initState();
+    _getRecentScore();
+  }
+
+  void _getRecentScore() {
+    ScoreStore().getRecentScore().then((score) {
+      setState(() {
+        this.recentScore = score;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,42 +44,20 @@ class ScoreBoard extends StatelessWidget {
                     Icons.show_chart,
                     color: primaryColor,
                   ),
-                  title: Text(title,
+                  title: Text(widget.title,
                       style: TextStyle(
                           color: primaryColor, fontWeight: FontWeight.bold)),
                 ),
                 dashedLineBreak(Colors.grey),
-                Table(
-                  columnWidths: {
-                    0: FractionColumnWidth(0.2),
-                    1: FractionColumnWidth(0.7),
-                    2: FractionColumnWidth(0.2)
-                  },
-                  children: [
-                    buildTableRow("Rank,Name,Score"),
-                  ],
-                ),
-                ListView.builder(
-                  itemCount: 5,
-                  shrinkWrap: true,
-                  // physics: const NeverScrollableScrollPhysics(),
-                  itemExtent: 35,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      leading: Text(
-                        index.toString(),
-                        style: TextStyle(color: greyFontColor, fontSize: 13),
-                      ),
-                      title: Text(
-                        'Thamaraiselvam',
-                        style: TextStyle(color: greyFontColor, fontSize: 13),
-                      ),
-                      trailing: Text(index.toString() + ' days ago',
-                          style: TextStyle(color: greyFontColor, fontSize: 13)),
-                    );
-                  },
-                ),
-                SizedBox(height: 15,)
+                (this.recentScore.length == 0)
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Text('No data found, Play some games'),
+                      )
+                    : buildTableRow(this.recentScore),
+                SizedBox(
+                  height: 15,
+                )
               ],
             ),
           ),

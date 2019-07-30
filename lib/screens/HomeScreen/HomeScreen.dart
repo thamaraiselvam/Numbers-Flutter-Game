@@ -30,12 +30,12 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 40,
                       ),
-                      bestScore(),
+                      BestScore(),
                       dashedLineBreak(Colors.white),
                       SizedBox(
                         height: 10,
                       ),
-                      tutorialWidget(),
+                      TutorialWidget(),
                       SizedBox(
                         height: 10,
                       )
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                   height: 10,
                 ),
                 ScoreBoard('Recent Scores'),
-                ScoreBoard('Leaderboard '),
+                // ScoreBoard('recent_score '),
               ],
             ),
           ),

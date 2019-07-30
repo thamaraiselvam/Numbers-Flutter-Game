@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:numbers/provider/ScoreStore.dart';
 import 'package:numbers/schema/blackSchema.dart';
 import 'package:numbers/screens/GameScreen/summaryModel.dart';
 import 'package:numbers/widgets/bgGradient.dart';
@@ -18,7 +19,7 @@ class _GameScreenState extends State<GameScreen> {
   List<BlockSchema> blocks;
   int currentTotal;
   Timer gameTimerObject;
-  int secCounter = 30;
+  int secCounter = 5;
   bool isTimeUp = false;
   Map<String, int> gameHistory = {"total": 0, "success": 0, "fail": 0};
   BlockDataStream blockDataStream = BlockDataStream();
@@ -67,6 +68,7 @@ class _GameScreenState extends State<GameScreen> {
           this.isTimeUp = true;
           this.gameTimerObject.cancel();
           showSummary(context, gameHistory);
+          ScoreStore().updateRecentScore(gameHistory['success']);
         }
       });
     });

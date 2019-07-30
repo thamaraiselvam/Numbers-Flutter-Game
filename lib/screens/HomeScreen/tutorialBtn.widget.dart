@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:numbers/utils/constants.dart';
 
-class tutorialWidget extends StatelessWidget {
-  const tutorialWidget({
+class TutorialWidget extends StatelessWidget {
+  const TutorialWidget({
     Key key,
   }) : super(key: key);
 
