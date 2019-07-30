@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:numbers/provider/ScoreStore.dart';
-import 'package:numbers/schema/blackSchema.dart';
+import 'package:numbers/schema/BlockSchema.dart';
 import 'package:numbers/screens/GameScreen/summaryModel.dart';
 import 'package:numbers/widgets/bgGradient.dart';
 import 'package:numbers/provider/BlockDataStream.dart';

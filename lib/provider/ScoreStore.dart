@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ScoreStore {
   SharedPreferences prefs;
 
-  final String scoreKey = 'recentScoreDummy';
+  final String scoreKey = 'recentScore';
   final maxStoreLength = 3;
 
   init() async {
