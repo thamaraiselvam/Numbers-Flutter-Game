@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:numbers/provider/ScoreStore.dart';
+import 'package:numbers/store/BestScore.dart';
+import 'package:numbers/store/RecentScoreStore.dart';
 import 'package:numbers/schema/BlockSchema.dart';
 import 'package:numbers/screens/GameScreen/summaryModel.dart';
 import 'package:numbers/widgets/bgGradient.dart';
@@ -68,10 +69,15 @@ class _GameScreenState extends State<GameScreen> {
           this.isTimeUp = true;
           this.gameTimerObject.cancel();
           showSummary(context, gameHistory);
-          ScoreStore().updateRecentScore(gameHistory['success']);
+          updateScores();
         }
       });
     });
+  }
+
+  void updateScores(){
+    RecentScoreStore().updateRecentScore(gameHistory['success']);
+    BestScoreStore().updateScore(gameHistory['success']);
   }
 
   void fillBlocksData() {

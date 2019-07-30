@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: secondaryBGColor,
         body: SingleChildScrollView(
           child: Container(
             color: primaryColorLowOpacity,
@@ -42,11 +43,10 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                // SizedBox(
+                //   height: 10,
+                // ),
                 ScoreBoard('Recent Scores'),
-                // ScoreBoard('recent_score '),
               ],
             ),
           ),

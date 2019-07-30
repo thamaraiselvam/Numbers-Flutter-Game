@@ -7,5 +7,9 @@ class BlockDataStream {
 
   final _controller = StreamController<Map<String, int>>();
 
+  void dispose(){
+    _controller.close();
+  }
+
   Stream<Map<String, int>> get stream => _controller.stream;
 }

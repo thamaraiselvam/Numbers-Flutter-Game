@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:numbers/service/RecentScoreService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ScoreStore {
+class RecentScoreStore {
   SharedPreferences prefs;
 
   final String scoreKey = 'recentScore';

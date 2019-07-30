@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:numbers/provider/ScoreStore.dart';
+import 'package:numbers/store/RecentScoreStore.dart';
 import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/dashedLine.dart';
 import 'package:numbers/widgets/recentScore.dart';
@@ -22,7 +22,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
   }
 
   void _getRecentScore() {
-    ScoreStore().getRecentScore().then((score) {
+    RecentScoreStore().getRecentScore().then((score) {
       setState(() {
         this.recentScore = score;
       });
@@ -32,6 +32,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: secondaryBGColor,
       padding: const EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 5),
       child: Column(
         children: <Widget>[
