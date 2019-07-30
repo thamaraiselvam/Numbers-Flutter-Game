@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:numbers/service/RecentScoreService.dart';
+import 'package:numbers/utils/Config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RecentScoreStore {
   SharedPreferences prefs;
 
   final String scoreKey = 'recentScore';
-  final maxStoreLength = 3;
+  final maxStoreLength = maxKeepGameHistoryCount;
 
   init() async {
     if (this.prefs == null) {
@@ -15,12 +16,12 @@ class RecentScoreStore {
   }
 
   updateRecentScore(int score) async {
-
     await this.init();
 
     List recentScores = await this.getRecentScore();
 
-    RecentScore newScore = RecentScore.manualPush(score.toString(), DateTime.now().millisecondsSinceEpoch.toString());
+    RecentScore newScore = RecentScore.manualPush(
+        score.toString(), DateTime.now().millisecondsSinceEpoch.toString());
 
     recentScores.insert(0, newScore);
 

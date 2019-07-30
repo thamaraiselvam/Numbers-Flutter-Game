@@ -92,7 +92,6 @@ class _GameScreenState extends State<GameScreen> {
         (this.gameHistory['success'] * costs['success']) +
         (this.gameHistory['fail'] * costs['fail']);
     this.gameHistory['score'] = score > 0 ? (score) : 0;
-    print(this.gameHistory);
   }
 
   void updateScores() {
