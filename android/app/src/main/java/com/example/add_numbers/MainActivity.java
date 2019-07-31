@@ -1,4 +1,4 @@
-package com.example.numbers;
+package com.thamaraiselvam.numbers;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
