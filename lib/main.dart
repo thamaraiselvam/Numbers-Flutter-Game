@@ -1,18 +1,26 @@
+import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:numbers/screens/GameScreen/GameScreen.dart';
 import 'package:numbers/screens/TurorialScreen.dart';
 import 'package:numbers/screens/LoadingScreen.dart';
-import 'package:flutter/material.dart';
 import 'package:numbers/screens/SplashScreen.dart';
 import 'package:numbers/screens/HomeScreen/HomeScreen.dart';
 
-Future<void> main() async {
+
+void main() {
   SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ]);
-  runApp(
-    new MaterialApp(
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       initialRoute: '/',
       routes: <String, WidgetBuilder> {
         '/': (BuildContext context) => SplashScreen(),
@@ -21,5 +29,7 @@ Future<void> main() async {
         '/game': (BuildContext context) => GameScreen(),
         '/tutorial': (BuildContext context) => TurorialScreen(),
       },
-    ));
+      // navigatorObservers: <NavigatorObserver>[observer],
+    );
+  }
 }
