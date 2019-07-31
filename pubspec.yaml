@@ -32,6 +32,7 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: "^0.7.2"
   firebase_core: ^0.4.0+8
+  firebase_analytics: ^1.0.2
 
 flutter_icons:
   android: "launcher_icon"
