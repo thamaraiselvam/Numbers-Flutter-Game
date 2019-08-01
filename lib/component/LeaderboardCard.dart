@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:numbers/store/RecentScoreStore.dart';
+import 'package:numbers/service/leaderboardService.dart';
 import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/dashedLine.dart';
-import 'package:numbers/widgets/recentScore.dart';
+import 'package:numbers/widgets/leadershipBoardTable.dart';
 
-class ScoreBoard extends StatefulWidget {
-  final String title;
-  ScoreBoard(this.title);
-
-  @override
-  _ScoreBoardState createState() => _ScoreBoardState();
+class LeaderboardCard extends StatefulWidget {
+  _LeaderboardCardState createState() => _LeaderboardCardState();
 }
 
-class _ScoreBoardState extends State<ScoreBoard> {
-  List recentScore = [];
-  Map scoreCardMeta = {};
+class _LeaderboardCardState extends State<LeaderboardCard> {
+  String title= 'Leaderboard';
+  List scores = [];
+
   @override
   void initState() {
     super.initState();
@@ -22,12 +19,13 @@ class _ScoreBoardState extends State<ScoreBoard> {
   }
 
   void _getRecentScore() {
-    RecentScoreStore().getRecentScore().then((score) {
+    leaderboardService().getData().then((score) {
       setState(() {
-        this.recentScore = score;
+        this.scores = score;
       });
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +43,17 @@ class _ScoreBoardState extends State<ScoreBoard> {
                     Icons.show_chart,
                     color: primaryColor,
                   ),
-                  title: Text(widget.title,
+                  title: Text(title,
                       style: TextStyle(
                           color: primaryColor, fontWeight: FontWeight.bold)),
                 ),
                 dashedLineBreak(Colors.grey),
-                (this.recentScore.length == 0)
+                (this.scores.length == 0)
                     ? Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Text('No data found, Play some games'),
                       )
-                    : buildTableRow(this.recentScore),
+                    : leaderboardTable(this.scores),
                 SizedBox(
                   height: 15,
                 )

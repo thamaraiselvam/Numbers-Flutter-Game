@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:numbers/component/ScoreCard.dart';
+import 'package:numbers/component/LeaderboardCard.dart';
+import 'package:numbers/component/RecentScoreCard.dart';
 import 'package:numbers/store/BestScore.dart';
 import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/dashedLine.dart';
@@ -66,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 // SizedBox(
                 //   height: 10,
                 // ),
-                ScoreBoard('Recent Scores'),
+                LeaderboardCard(),
+                RecentScoreBoard(),
               ],
             ),
           ),

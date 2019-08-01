@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 
-DataTable buildTableRow(List listOfColumns) {
+DataTable recentScoreTable(List listOfColumns) {
   return DataTable(
     columns: [
       DataColumn(label: Text('Score')),
