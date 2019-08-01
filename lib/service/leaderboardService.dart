@@ -1,18 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:numbers/store/SettingsStore.dart';
+import 'package:numbers/utils/Common.dart';
 
 class LeaderboardService {
   final String collection = 'leaderboard';
   final String orderByKey = 'score';
 
-  setData(Map gameState) {
-    Map newData = this._formatSetData(gameState);
+  setData(Map gameState) async {
+    Map newData = await this._formatSetData(gameState);
     Firestore.instance.collection(this.collection).document().setData(newData);
   }
 
-  _formatSetData(Map gameState) {
+  _formatSetData(Map gameState) async {
+
+    String name = await SettingsStore().getKey('name');
+
+    if(name == null){
+      name = Common.getRandomName();
+    }
+
     return {
-      'name': 'random',
-      'device': 'random',
+      'name': name,
       'time': DateTime.now().millisecondsSinceEpoch.toString(),
       'total': gameState['total'],
       'success': gameState['success'],
