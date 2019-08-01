@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:numbers/service/leaderboardService.dart';
+import 'package:numbers/service/LeaderboardService.dart';
 import 'package:numbers/utils/constants.dart';
 import 'package:numbers/widgets/dashedLine.dart';
 import 'package:numbers/widgets/leadershipBoardTable.dart';
@@ -19,7 +19,7 @@ class _LeaderboardCardState extends State<LeaderboardCard> {
   }
 
   void _getRecentScore() {
-    leaderboardService().getData().then((score) {
+    LeaderboardService().getData().then((score) {
       setState(() {
         this.scores = score;
       });
