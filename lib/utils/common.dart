@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 
 class Common {
@@ -56,5 +57,9 @@ class Common {
     combinations.shuffle();
 
     return combinations;
+  }
+
+  static String getRandomName(){
+      return Faker().person.name();
   }
 }

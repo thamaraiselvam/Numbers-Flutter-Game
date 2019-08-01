@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:numbers/service/LeaderboardService.dart';
-import 'package:numbers/store/BestScore.dart';
+import 'package:numbers/store/BestScoreStore.dart';
 import 'package:numbers/store/RecentScoreStore.dart';
 import 'package:numbers/schema/BlockSchema.dart';
 import 'package:numbers/screens/GameScreen/summaryModel.dart';

@@ -30,6 +30,7 @@ dependencies:
   flutter_crashlytics: ^1.0.0
   flutter_launcher_icons: "^0.7.2"
   cloud_firestore: ^0.12.9
+  faker: ^1.1.1
 
 dev_dependencies:
   flutter_test:
