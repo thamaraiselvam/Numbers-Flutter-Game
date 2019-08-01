@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:numbers/utils/constants.dart';
+import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 
 class TutorialWidget extends StatelessWidget {
   const TutorialWidget({
@@ -12,8 +12,7 @@ class TutorialWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       child: RaisedButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: primaryColor,
         onPressed: () {
           Navigator.of(context).pushNamed('/tutorial');
