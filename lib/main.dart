@@ -12,7 +12,6 @@ import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 import 'package:numbers/utils/Config.dart';
 
 Future<void> main() async {
-
   FirebaseAnalytics analytics = FirebaseAnalytics();
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -35,6 +34,7 @@ Future<void> main() async {
 
   runZoned<Future<Null>>(() async {
     runApp(new MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => SplashScreen(),
