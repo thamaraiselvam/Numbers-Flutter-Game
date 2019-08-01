@@ -26,7 +26,6 @@ class _LeaderboardCardState extends State<LeaderboardCard> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
