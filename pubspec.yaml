@@ -27,15 +27,12 @@ dependencies:
   timeago: ^2.0.18
   firebase_core: ^0.4.0+8
   firebase_analytics: ^1.0.2
-
+  flutter_crashlytics: ^1.0.0
+  flutter_launcher_icons: "^0.7.2"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.7.2"
-  firebase_core: ^0.4.0+8
-  firebase_analytics: ^1.0.2
-  flutter_crashlytics: ^1.0.0
 
 flutter_icons:
   android: "launcher_icon"

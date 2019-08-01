@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:numbers/utils/constants.dart';
-import 'package:flutter_crashlytics/flutter_crashlytics.dart';
 
 class TutorialWidget extends StatelessWidget {
   const TutorialWidget({
