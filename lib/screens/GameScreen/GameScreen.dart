@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:numbers/service/leaderboardService.dart';
 import 'package:numbers/store/BestScore.dart';
 import 'package:numbers/store/RecentScoreStore.dart';
 import 'package:numbers/schema/BlockSchema.dart';
@@ -97,6 +98,7 @@ class _GameScreenState extends State<GameScreen> {
   void updateScores() {
     RecentScoreStore().updateRecentScore(gameHistory['score']);
     BestScoreStore().updateScore(gameHistory['score']);
+    leaderboardService().setData(gameHistory);
   }
 
   void fillBlocksData() {
