@@ -1,6 +1,6 @@
 # Numbers - Flutter Game
 
-Numbers is simple game built in Flutter Framework and is purely based on numbers to improve problem solving skills.
+Numbers is a simple game built in Flutter Framework and is purely based on numbers to improve problem solving skills.
 
 ### Screenshots
 
