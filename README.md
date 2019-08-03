@@ -18,5 +18,4 @@ Numbers is a simple game built in Flutter Framework and is purely based on numbe
 
 Just match the target shown by adding one or more number blocks. <a href="https://youtu.be/vlFNJ0v2sPo" target="_blank"> See Demo Here </a>
 
-### Privacy Policy
-Read <a href="https://github.com/thamaraiselvam/Numbers-Flutter-Game/blob/master/privacy_policy.md">Privacy Policy</a>
+<a href="https://github.com/thamaraiselvam/Numbers-Flutter-Game/blob/master/privacy_policy.md">Privacy Policy</a>
