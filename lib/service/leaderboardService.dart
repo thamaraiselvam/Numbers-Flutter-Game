@@ -12,10 +12,9 @@ class LeaderboardService {
   }
 
   _formatSetData(Map gameState) async {
-
     String name = await SettingsStore().getKey('name');
 
-    if(name == null){
+    if (name == null) {
       name = Common.getRandomName();
     }
 
