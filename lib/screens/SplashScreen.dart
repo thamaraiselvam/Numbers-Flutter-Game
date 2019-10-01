@@ -11,19 +11,30 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  Timer _timer;
+
   void initState() {
     super.initState();
 
     loadData();
   }
+  
 
   Future<Timer> loadData() async {
-    return new Timer(Duration(seconds: 2), onDoneLoading);
+    _timer = new Timer(Duration(seconds: 2), onDoneLoading);
+    return _timer;
   }
 
   onDoneLoading() async {
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
