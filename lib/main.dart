@@ -13,6 +13,7 @@ import 'package:numbers/utils/Config.dart';
 
 Future<void> main() async {
   FirebaseAnalytics analytics = FirebaseAnalytics();
+  WidgetsFlutterBinding.ensureInitialized();
 
   FlutterError.onError = (FlutterErrorDetails details) {
     if (isInDebugMode) {
