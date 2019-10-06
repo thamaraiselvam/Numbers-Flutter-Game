@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 
-import '../lib/screens/TurorialScreen.dart';
+import 'package:numbers/screens/TurorialScreen.dart';
 
 //Match the target shown at the top by adding one or more number blocks.
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lib/screens/SplashScreen.dart';
+import 'package:numbers/screens/SplashScreen.dart';
 
 void main() {
   Widget makeTestableWidget({Widget child}) {
