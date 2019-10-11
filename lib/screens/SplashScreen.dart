@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:numbers/utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
+
   const SplashScreen({Key key}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
-
 class _SplashScreenState extends State<SplashScreen> {
 
   Timer _timer;
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     loadData();
   }
-  
+
 
   Future<Timer> loadData() async {
     _timer = new Timer(Duration(seconds: 2), onDoneLoading);

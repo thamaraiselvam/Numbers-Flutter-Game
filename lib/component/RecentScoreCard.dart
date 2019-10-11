@@ -12,7 +12,7 @@ class RecentScoreBoard extends StatefulWidget {
 class _RecentScoreBoardState extends State<RecentScoreBoard> {
   List recentScore = [];
   Map scoreCardMeta = {};
-  String title = 'Recent Scores';
+  String title = 'Your Recent Scores';
 
   @override
   void initState() {
