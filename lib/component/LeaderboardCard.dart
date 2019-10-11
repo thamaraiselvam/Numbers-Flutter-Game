@@ -5,21 +5,31 @@ import 'package:numbers/widgets/dashedLine.dart';
 import 'package:numbers/widgets/leadershipBoardTable.dart';
 
 class LeaderboardCard extends StatefulWidget {
+  final String title;
+  final String type;
+  final int limit;
+
+  const LeaderboardCard({Key key, this.title, this.type, this.limit}): super(key: key);
+
+  @override
   _LeaderboardCardState createState() => _LeaderboardCardState();
 }
 
 class _LeaderboardCardState extends State<LeaderboardCard> {
-  String title= 'Leaderboard';
   List scores = [];
 
   @override
   void initState() {
     super.initState();
-    _getRecentScore();
+    _getScores();
   }
 
-  void _getRecentScore() {
-    LeaderboardService().getData().then((score) {
+  void _getScores() {
+    this.getScore();
+  }
+
+  void getScore(){
+    LeaderboardService().getData(limit: widget.limit, leaderboardType: widget.type).then((score) {
       setState(() {
         this.scores = score;
       });
@@ -42,7 +52,7 @@ class _LeaderboardCardState extends State<LeaderboardCard> {
                     Icons.show_chart,
                     color: primaryColor,
                   ),
-                  title: Text(title,
+                  title: Text(widget.title,
                       style: TextStyle(
                           color: primaryColor, fontWeight: FontWeight.bold)),
                 ),
