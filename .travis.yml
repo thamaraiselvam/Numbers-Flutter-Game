@@ -1,0 +1,16 @@
+os:
+  - osx
+language: generic
+osx_image: xcode10.2
+install:
+  - |
+    if [ ! -d $HOME/flutter ] ; then
+      git clone https://github.com/flutter/flutter.git -b stable --depth 1 $HOME/flutter
+    fi
+script:
+  - $HOME/flutter/bin/flutter test
+
+cache:
+  directories:
+    - $HOME/flutter
+    - $HOME/.pub-cache
